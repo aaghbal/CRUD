@@ -10,6 +10,8 @@ const config: Config = {
     extend: {
       backgroundImage:{
         "primary": "url('/background.jpeg')",
+        "book": "url('/booksbag.jpg')",
+        "addbook": "url('/addbook.jpg')",
       },
       colors: {
         background: "var(--background)",
