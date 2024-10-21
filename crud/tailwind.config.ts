@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundImage:{
+        "primary": "url('/background.jpeg')",
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
