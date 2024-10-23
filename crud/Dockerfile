@@ -12,8 +12,9 @@ RUN npm install
 
 RUN npm i --save-dev @types/pg
 
-COPY . .
+RUN npm install @prisma/client
+RUN npm install --save-dev prisma
 
-RUN npx prisma generate
+COPY . .
 
 CMD [ "npm", "run", "dev" ]
