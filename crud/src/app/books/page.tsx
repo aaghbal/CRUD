@@ -1,11 +1,12 @@
 import { DialogBook } from "@/components/dialogForm";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { Book } from "@/components/dialogForm";
 import Link from "next/link";
 const prisma = new PrismaClient();
 
 
-export const delBook = async (formData: FormData) => {
+const delBook = async (formData: FormData) => {
   "use server";
   const id = formData.get('bookId');
   await prisma.book.delete({
@@ -38,7 +39,7 @@ export default async function BookList() {
           </thead>
 
           <tbody className="bg-black bg-opacity-25 divide-y divide-orange-400/20">
-            {books.map((book) => (
+            {books.map((book: Book) => (
               <tr key={book.id} className="hover:bg-black">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{book.title}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{book.author}</td>
