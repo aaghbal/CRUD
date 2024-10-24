@@ -1,138 +1,63 @@
-"use client";
+import { DialogBook } from "@/components/dialogForm";
+import { PrismaClient } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import Link from "next/link";
+const prisma = new PrismaClient();
 
-import { update } from '@/actions/update';
-import { useEffect, useState } from 'react';
 
-interface Book {
-  id: number; 
-  title: string;
-  author: string;
-  genre: string;
-  n_page: number; 
-  language: string;
+export const delBook = async (formData: FormData) => {
+  "use server";
+  const id = formData.get('bookId');
+  await prisma.book.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  revalidatePath('/books');
 }
 
-const BookList = () => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [editingBook, setEditingBook] = useState<Book | null>(null); 
-  const [updatedTitle, setUpdatedTitle] = useState('');
-  const [updatedAuthor, setUpdatedAuthor] = useState('');
-  const [updatedGenre, setUpdatedGenre] = useState('');
-  const [updatedLanguage, setUpdatedLanguage] = useState('');
-
-  const handleEditClick = (book: Book) => {
-    setEditingBook(book); 
-    setUpdatedTitle(book.title);
-    setUpdatedAuthor(book.author);
-    setUpdatedGenre(book.genre);
-    setUpdatedLanguage(book.language);
-  };
-
-  const handleUpdateSubmit = async () => {
-    if (!editingBook) return;
-  
-    const updatedBookData = {
-      id: editingBook.id,
-      title: updatedTitle,
-      author: updatedAuthor,
-      genre: updatedGenre,
-      language: updatedLanguage,
-    };
-
-    const updatedBook = await update(updatedBookData, editingBook.id);
-    setBooks((prevBooks) =>
-          prevBooks.map((book) =>
-            book.id === updatedBook.id ? updatedBook : book
-          )
-        );
-    setEditingBook(null); 
-  };
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch('/api/book');
-        console.log('response', response);
-        if (!response.ok) {
-          throw new Error('Failed to fetch books');
-        }
-        const data = await response.json();
-        console.log('Fetched data:', data);
-        if (Array.isArray(data)) {
-          setBooks(data);
-        } else {
-          console.error('Fetched data is not an array');
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchBooks();
-  }, []);
-
+export default async function BookList() {
+  const books = await prisma.book.findMany();
   return (
-          <section className="flex justify-center items-center flex-row h-screen space-x-12">
-            <div className="border-2 border-white border-opacity-25 rounded-[30px] w-[70%] h-[80%]">
-                <table className="border border-yellow-300 w-[100%]">
-                  <thead>
-                    <tr className="border border-red-600 h-[50px]">
-                      <td className="border border-green-500  "><span className="flex justify-center items-center font-bold text-2xl">title</span></td>
-                      <td className="border border-green-500  "><span className="flex justify-center items-center font-bold text-2xl">author</span></td>
-                      <td className="border border-green-500  "><span className="flex justify-center items-center font-bold text-2xl">genre</span></td>
-                      <td className="border border-green-500  "><span className="flex justify-center items-center font-bold text-2xl">language</span></td>
-                      <td className="border border-green-500  "><span className="flex justify-center items-center font-bold text-2xl">action</span></td>
-                    </tr>
-                  </thead>
-      
-                  <tbody>
-                  {books.map((book, index) => (
-                        <tr key={index} className="border border-red-600 h-[50px]">
-                          <td className="border border-green-500"><span className="flex justify-center items-center">{book.title}</span></td>
-                          <td className="border border-green-500"><span className="flex justify-center items-center">{book.author}</span></td>
-                          <td className="border border-green-500"><span className="flex justify-center items-center">{book.genre}</span></td>
-                          <td className="border border-green-500"><span className="flex justify-center items-center">{book.language}</span></td>
-                          <td className="border border-green-500">
-                            <div className="flex justify-center items-center space-x-2">
-                            <button  onClick={() => handleEditClick(book)}   className="bg-blue-500 text-white p-2 rounded-md text-sm">Update</button>
-                              <button  className="bg-red-600 text-white p-2 rounded-md text-sm">Remove</button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-                {editingBook && (
-                          <form onSubmit={handleUpdateSubmit}>
-                            <input
-                              type="text"
-                              value={updatedTitle}
-                              onChange={(e) => setUpdatedTitle(e.target.value)}
-                              placeholder="Title"
-                            />
-                            <input
-                              type="text"
-                              value={updatedAuthor}
-                              onChange={(e) => setUpdatedAuthor(e.target.value)}
-                              placeholder="Author"
-                            />
-                            <input
-                              type="text"
-                              value={updatedGenre}
-                              onChange={(e) => setUpdatedGenre(e.target.value)}
-                              placeholder="Genre"
-                            />
-                            <input
-                              type="text"
-                              value={updatedLanguage}
-                              onChange={(e) => setUpdatedLanguage(e.target.value)}
-                              placeholder="Language"
-                            />
-                            <button type="submit">Save Changes</button>
-                          </form>
-                        )}
-            </div>
-          </section>
-        );
-};
+    <section className="flex justify-center items-center space-y-2 flex-col h-screen space-x-12 bg-primary bg-cover">
+      <div  className="ml-[65%] flex space-x-3">
+        <Link href="/AddBook"><button className="bg-green-500 p-2 rounded-[10px]">Add Book</button></Link>
+        <Link href="/"><button className="bg-blue-500 p-2 rounded-[10px]">Home</button></Link>
+        </div>
+      <div className="border-2 border-white border-opacity-25 rounded-2xl w-3/4 h-4/5 bg-black/50  p-6  overflow-y-auto no-scrollbar">
+        <table className="min-w-full divide-y divide-white/30 bg-black bg-opacity-15">
+          <thead className="sticky top-0 bg-black z-10">
+            <tr className="bg-black bg-opacity-30">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Author</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Genre</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Language</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider pl-[13%]">Action</th>
+            </tr>
+          </thead>
 
-export default BookList;
+          <tbody className="bg-black bg-opacity-25 divide-y divide-orange-400/20">
+            {books.map((book) => (
+              <tr key={book.id} className="hover:bg-black">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{book.title}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{book.author}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{book.genre}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{book.language}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                  <div className="flex justify-center items-center space-x-2">
+                    <form action={delBook}>
+                      <input type="hidden" name="bookId" value={book.id} />
+                      <button className=" bg-red-600 text-white p-2 rounded-[20px] text-sm hover:bg-red-700">Remove</button>
+                    </form>
+                    <DialogBook book={book} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
