@@ -8,10 +8,10 @@ export default function AddBook() {
 
   const AddBook = async (formData: FormData) => {
     "use server";
-    const title = formData.get('title');
-    const author = formData.get('author');
-    const genre = formData.get('genre');
-    const language = formData.get('language');
+    const title = formData.get('title') as string ;
+    const author = formData.get('author') as string ;
+    const genre = formData.get('genre') as string ;
+    const language = formData.get('language') as string ;
 
     await prisma.book.create({
       data: {

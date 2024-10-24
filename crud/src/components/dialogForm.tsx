@@ -14,10 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateBook } from "@/actions/UpdateBook"; // Ensure correct import
 
-export function DialogBook({ book }) {
+export function DialogBook({ book }: { book: any }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event : any) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     await updateBook(formData);
