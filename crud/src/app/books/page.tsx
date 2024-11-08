@@ -34,7 +34,7 @@ export default async function BookList() {
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Author</th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Genre</th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Language</th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider pl-[13%]">Action</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider pl-[10%]">Action</th>
             </tr>
           </thead>
 
