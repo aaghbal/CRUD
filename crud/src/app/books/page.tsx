@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { Book } from "@/components/dialogForm";
 import Link from "next/link";
-import DeleteButton from "@/components/DeleteButton"; // Import DeleteButton component
+import DeleteButton from "@/components/DeleteButton";
 
 const prisma = new PrismaClient();
 export const dynamic = 'force-dynamic';
