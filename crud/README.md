@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+Thanks for the clarification! Here's an updated README.md for your full-stack Next.js project with Docker Compose:
 
-First, run the development server:
+Book CRUD Project
+This project is a full-stack Book CRUD (Create, Read, Update, Delete) application built with Next.js and Docker Compose. It allows you to manage a collection of books through a backend API and a frontend interface, all containerized with Docker.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Features
+Create a new book.
+Read book details.
+Update book information.
+Delete a book.
+Full-stack application with both frontend and backend within the same Next.js project.
+Database and server are containerized using Docker Compose.
+Technologies Used
+Frontend & Backend: Next.js (React.js for frontend and API routes for backend)
+Database: PostgreSQL
+Docker: Docker Compose for containerization
+Requirements
+Docker
+Docker Compose
+Getting Started
+1. Clone the repository
+bash
+Copy code
+git clone [Your GitHub Repository URL]
+cd book-crud
+2. Set up the project with Docker Compose
+Make sure you have Docker and Docker Compose installed. Then, run the following command to build and start the containers:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+bash
+Copy code
+docker-compose up --build
+This command will build the containers for the frontend, backend (via Next.js API routes), and database, and start the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Access the application
+Once the containers are up and running, you can access the frontend application by navigating to:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Frontend: http://localhost:3000
+The backend API is integrated within the Next.js project and is accessible at:
 
-## Learn More
+Backend API Routes: http://localhost:3000/api/books
+4. Stopping the application
+To stop the containers, run:
 
-To learn more about Next.js, take a look at the following resources:
+bash
+Copy code
+docker-compose down
+API Endpoints
+In this project, the backend API is integrated with Next.js API routes.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+POST /api/books
+Create a new book.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Request Body:
+json
+Copy code
+{
+  "title": "Book Title",
+  "author": "Author Name",
+  "isbn": "123-4567890123"
+}
+GET /api/books
+Retrieve the list of all books.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Response:
+json
+Copy code
+[
+  {
+    "id": 1,
+    "title": "Book Title",
+    "author": "Author Name",
+    "isbn": "123-4567890123"
+  },
+  ...
+]

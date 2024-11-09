@@ -6,6 +6,7 @@ import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton"; // Import DeleteButton component
 
 const prisma = new PrismaClient();
+export const dynamic = 'force-dynamic';
 
 const delBook = async (bookId: number) => {
   "use server";
